@@ -7,7 +7,7 @@ WORKDIR /src
 COPY . .
 RUN if [ ! -f openclaw/package.json ]; then \
       rm -rf openclaw && \
-      git clone --depth 1 https://github.com/openclaw/openclaw.git openclaw; \
+      git clone --depth 1 -b affine-extension https://github.com/potnoodledev/openclaw.git openclaw; \
     fi
 
 # Stage 2: Build (full install + compile)
@@ -23,6 +23,7 @@ WORKDIR /app
 
 COPY --from=source /src/openclaw/package.json /src/openclaw/pnpm-lock.yaml /src/openclaw/pnpm-workspace.yaml /src/openclaw/.npmrc ./
 COPY --from=source /src/openclaw/ui/package.json ./ui/package.json
+COPY --from=source /src/openclaw/extensions ./extensions
 COPY --from=source /src/openclaw/patches ./patches
 COPY --from=source /src/openclaw/scripts ./scripts
 

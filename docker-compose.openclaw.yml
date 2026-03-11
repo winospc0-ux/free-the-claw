@@ -1,39 +1,4 @@
 services:
-  claude-code-free:
-    build:
-      context: ./claude-code-free
-      dockerfile: ../Dockerfile.claude-code-free
-    container_name: claude-code-free
-    restart: unless-stopped
-    ports:
-      - "8082:8082"
-    environment:
-      - NVIDIA_NIM_API_KEY=${NVIDIA_NIM_API_KEY}
-      - MODEL=${MODEL:-nvidia_nim/stepfun-ai/step-3.5-flash}
-      - NVIDIA_NIM_MAX_TOKENS=81920
-      - NVIDIA_NIM_TEMPERATURE=1.0
-      - NVIDIA_NIM_TOP_P=1.0
-      - NVIDIA_NIM_TOP_K=-1
-      - NVIDIA_NIM_RATE_LIMIT=40
-      - NVIDIA_NIM_RATE_WINDOW=60
-      - NVIDIA_NIM_REASONING_EFFORT=high
-      - NVIDIA_NIM_INCLUDE_REASONING=true
-      - NVIDIA_NIM_PRESENCE_PENALTY=0.0
-      - NVIDIA_NIM_FREQUENCY_PENALTY=0.0
-      - NVIDIA_NIM_MIN_P=0.0
-      - NVIDIA_NIM_REPETITION_PENALTY=1.0
-      - NVIDIA_NIM_PARALLEL_TOOL_CALLS=true
-      - CLAUDE_WORKSPACE=./agent_workspace
-      - MAX_CLI_SESSIONS=10
-      - ALLOWED_DIR=
-      - FAST_PREFIX_DETECTION=true
-      - ENABLE_NETWORK_PROBE_MOCK=true
-      - ENABLE_TITLE_GENERATION_SKIP=true
-      - ENABLE_SUGGESTION_MODE_SKIP=true
-      - ENABLE_FILEPATH_EXTRACTION_MOCK=true
-    volumes:
-      - claude-code-free-workspace:/app/agent_workspace
-
   openclaw:
     build: ./openclaw
     container_name: openclaw
@@ -48,20 +13,30 @@ services:
     environment:
       - HOME=/home/node
       - TERM=xterm-256color
+      # AFFiNE agent credentials (for doc read/write tools)
       - AFFINE_URL=${AFFINE_URL:-http://host.docker.internal:3010}
       - AFFINE_AGENT_EMAIL=${AFFINE_AGENT_EMAIL:-paul@affine.local}
       - AFFINE_AGENT_PASSWORD=${AFFINE_AGENT_PASSWORD:-AffinePaul123}
+      # Model name (auto-synced from .env for accurate display)
       - MODEL=${MODEL:-nvidia_nim/stepfun-ai/step-3.5-flash}
+      # API key passed to openclaw config (can be any non-empty value for the proxy)
       - ANTHROPIC_API_KEY=sk-placeholder
+      # Gateway access token - change this to secure your gateway
       - OPENCLAW_GATEWAY_TOKEN=changeme
-      - OPENCLAW_GATEWAY_PASSWORD=changeme
+      # Optional: password auth instead of token
+      - OPENCLAW_GATEWAY_PASSWORD=
+      # GitHub PAT: enables agent persona (SOUL.md) + git operations
       - GITHUB_PAT_TOKEN=${GITHUB_PAT_TOKEN}
+      # Twitter/X: enables tweeting + reading mentions as @voxxelle_
       - TWITTER_CLIENT_ID=${TWITTER_CLIENT_ID}
       - TWITTER_CLIENT_SECRET=${TWITTER_CLIENT_SECRET}
       - TWITTER_BEARER_TOKEN=${TWITTER_BEARER_TOKEN}
       - TWITTER_REFRESH_TOKEN=${TWITTER_REFRESH_TOKEN}
+      # ComfyUI Cloud: enables video generation scripts
       - COMFY_UI_API_KEY=${COMFY_UI_API_KEY}
+      # ETH Wallet Private Key: enables smart contract interactions
       - ETH_WALLET_PRIVATE_KEY=${ETH_WALLET_PRIVATE_KEY}
+
     user: "root"
     volumes:
       - ./openclaw-config:/openclaw-config:ro
@@ -81,5 +56,4 @@ services:
       ]
 
 volumes:
-  claude-code-free-workspace:
   openclaw-data:
