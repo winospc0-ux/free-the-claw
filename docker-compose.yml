@@ -62,6 +62,9 @@ services:
       - TWITTER_REFRESH_TOKEN=${TWITTER_REFRESH_TOKEN}
       - COMFY_UI_API_KEY=${COMFY_UI_API_KEY}
       - ETH_WALLET_PRIVATE_KEY=${ETH_WALLET_PRIVATE_KEY}
+      - OPENCLAW_CONTROLUI_DANGEROUSLY_DISABLE_DEVICE_AUTH=true
+      - OPENCLAW_CONTROLUI_ALLOW_INSECURE_AUTH=true
+
     user: "root"
     volumes:
       - ./openclaw-config:/openclaw-config:ro
