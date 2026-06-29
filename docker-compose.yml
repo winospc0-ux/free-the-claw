@@ -9,7 +9,7 @@ services:
       - "8082:8082"
     environment:
       - NVIDIA_NIM_API_KEY=${NVIDIA_NIM_API_KEY}
-      - MODEL=${MODEL:-nvidia_nim/stepfun-ai/step-3.5-flash}
+      - MODEL=${MODEL:-nvidia_nim/z-ai/glm-5.1}
       - NVIDIA_NIM_MAX_TOKENS=81920
       - NVIDIA_NIM_TEMPERATURE=1.0
       - NVIDIA_NIM_TOP_P=1.0
