@@ -2,12 +2,16 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock* ./
+COPY claude-code-free/pyproject.toml claude-code-free/uv.lock* ./
 
 RUN pip install --no-cache-dir uv && \
     uv pip install --system --no-cache -r pyproject.toml
 
-COPY . .
+COPY claude-code-free/ .
+
+# Apply patches to fix 400 Bad Request parameter validation errors
+COPY patches/settings.py config/settings.py
+COPY patches/request.py providers/nvidia_nim/request.py
 
 EXPOSE 8082
 

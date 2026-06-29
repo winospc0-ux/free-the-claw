@@ -1,8 +1,8 @@
 services:
   claude-code-free:
     build:
-      context: ./claude-code-free
-      dockerfile: ../Dockerfile.claude-code-free
+      context: .
+      dockerfile: Dockerfile.claude-code-free
     container_name: claude-code-free
     restart: unless-stopped
     ports:
