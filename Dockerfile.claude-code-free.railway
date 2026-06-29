@@ -22,6 +22,10 @@ RUN pip install --no-cache-dir uv && \
 
 COPY --from=source /src/claude-code-free/ .
 
+# Apply patches to fix 400 Bad Request parameter validation errors
+COPY --from=source /src/patches/settings.py config/settings.py
+COPY --from=source /src/patches/request.py providers/nvidia_nim/request.py
+
 EXPOSE 8082
 
 CMD ["uvicorn", "server:app", "--host", "::", "--port", "8082"]
